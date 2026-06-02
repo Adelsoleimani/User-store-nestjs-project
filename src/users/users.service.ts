@@ -73,8 +73,12 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    const result = await this.userRepository.delete(id);
-
-    if (result.affected === 0) throw new NotFoundException('deleting faild');
+    try {
+      await this.userRepository.delete(id);
+    } catch {
+      throw new BadRequestException(
+        'این کاربر دارای داده‌های وابسته است و قابل حذف نیست',
+      );
+    }
   }
 }

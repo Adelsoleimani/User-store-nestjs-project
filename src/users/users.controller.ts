@@ -12,7 +12,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { EnumRole } from './enums/EnumRole';
+import { FindAllQueryDto } from './dto/FindAllQuery.dto';
 
 @Controller('users')
 export class UsersController {
@@ -30,11 +30,16 @@ export class UsersController {
 
   @Get()
   async findAll(
-    @Query('role') role?: EnumRole,
-    @Query('limit') limit: number = 10,
-    @Query('page') page: number = 1,
+    @Query() query: FindAllQueryDto,
+    // @Query('role') role?: EnumRole,
+    // @Query('limit') limit: number = 10,
+    // @Query('page') page: number = 1,
   ) {
-    const users = await this.usersService.findAll(role, limit, page);
+    const users = await this.usersService.findAll(
+      query.role,
+      query.limit,
+      query.page,
+    );
     return {
       statusCode: HttpStatus.OK,
       data: users,
@@ -68,7 +73,7 @@ export class UsersController {
     return {
       statusCode: HttpStatus.OK,
       data: null,
-      message: 'با موفقیت  کاربر گرفته شد',
+      message: 'با موفقیت  کاربر دیلیت شد',
     };
   }
 }

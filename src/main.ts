@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // swagger config
   const config = new DocumentBuilder()
-    .setTitle('داکیومنت  فروشگاه api ')
+    .setTitle('API Store Document')
     .setDescription('این مستندات برای راهنمایی کاربر است ')
     .setVersion('1.0.0')
     .addBearerAuth()
@@ -26,4 +26,7 @@ async function bootstrap() {
   );
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Application failed to start', err);
+  process.exit(1);
+});
