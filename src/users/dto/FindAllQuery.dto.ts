@@ -1,18 +1,19 @@
-import { IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsEnum, IsInt } from 'class-validator';
 import { EnumRole } from '../enums/EnumRole';
 import { Type } from 'class-transformer';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FindAllQueryDto {
-  @IsOptional()
+  @ApiPropertyOptional({ default: EnumRole.NormalUser })
   @IsEnum(EnumRole)
   role?: EnumRole.NormalUser;
 
-  @IsOptional()
+  @ApiPropertyOptional({ default: 10 })
   @Type(() => Number) // برای تبدیل رشته به عدد
   @IsInt()
   limit?: number = 10;
 
-  @IsOptional()
+  @ApiPropertyOptional({ default: 1 })
   @Type(() => Number)
   @IsInt()
   page?: number = 1;

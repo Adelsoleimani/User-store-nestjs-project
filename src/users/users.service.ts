@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { EnumRole } from './enums/EnumRole';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
@@ -23,7 +23,12 @@ export class UsersService {
       throw new BadRequestException('این شماره موبایل قبلاً ثبت شده است');
     }
     try {
-      const newProject = this.userRepository.create(createUserDto);
+      const { password, ...data } = createUserDto;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newProject = this.userRepository.create({
+        ...data,
+        password: hashedPassword,
+      });
       return await this.userRepository.save(newProject);
     } catch {
       throw new BadRequestException('ثبت کاربر با خطا مواجه شد');
@@ -47,6 +52,12 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
+      relations: {
+        addresses: true,
+        basket_item: true,
+        products_mark: true,
+        tikets: true,
+      },
     });
     if (!user) throw new NotFoundException(`user ${id} not found`);
     return user;

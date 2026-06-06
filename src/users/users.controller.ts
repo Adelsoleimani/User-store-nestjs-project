@@ -13,11 +13,13 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindAllQueryDto } from './dto/FindAllQuery.dto';
-
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+@ApiTags('مدیریت کاربران')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'ایجاد کاربر جدید' })
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const newProject = await this.usersService.create(createUserDto);
