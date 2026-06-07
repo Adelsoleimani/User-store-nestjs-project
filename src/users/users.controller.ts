@@ -13,7 +13,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindAllQueryDto } from './dto/FindAllQuery.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
+@ApiBearerAuth()
 @ApiTags('مدیریت کاربران')
 @Controller('users')
 export class UsersController {
@@ -61,7 +63,6 @@ export class UsersController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    // return this.usersService.update(+id, updateUserDto);
     return {
       statusCode: HttpStatus.CREATED,
       data: await this.usersService.update(+id, updateUserDto),

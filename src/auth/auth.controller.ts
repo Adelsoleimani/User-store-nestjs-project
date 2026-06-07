@@ -2,10 +2,13 @@ import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Public()
   @Post('rigester')
   async rigester(@Body() rigesterDto: RegisterDto) {
     const user = await this.authService.register(
@@ -20,6 +23,8 @@ export class AuthController {
       message: 'باموفقیت ایجاد شد کاربر',
     };
   }
+
+  @Public()
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const data = this.authService.login(loginDto);

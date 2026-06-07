@@ -9,6 +9,8 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { IpTrackerModule } from './ip_tracker/ip_tracker.module';
 import { IpTrackerMiddleware } from './ip_tracker/ip_tracker.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +33,12 @@ import { IpTrackerMiddleware } from './ip_tracker/ip_tracker.middleware';
     ProductsModule,
     CategoriesModule,
     IpTrackerModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {

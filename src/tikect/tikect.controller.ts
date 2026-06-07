@@ -1,7 +1,8 @@
 import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
 import { TikectService } from './tikect.service';
 import { CreateTikectDto } from './dto/create-tikect.dto';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Controller('tikect')
 export class TikectController {
   constructor(private readonly tikectService: TikectService) {}
