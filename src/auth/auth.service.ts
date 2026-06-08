@@ -29,7 +29,12 @@ export class AuthService {
       if (!(await bcrypt.compare(loginDto.password, user.password)))
         throw new UnauthorizedException('پسورد وارد شده اشتباه است');
 
-      const payload = { sub: user.id, mobile: user.mobile, name: user.name };
+      const payload = {
+        sub: user.id,
+        mobile: user.mobile,
+        name: user.name,
+        role: user.role,
+      };
       const token = this.jwtService.sign(payload);
 
       return {

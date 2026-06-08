@@ -12,7 +12,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: configService.get('JWT_SECRET')!,
     });
   }
-  validate(payload: any) {
+  validate(payload: {
+    sub: number;
+    mobile: string;
+    name: string;
+    role: string;
+  }) {
     // اینجا می‌تونی اطلاعات payload رو چک کنی
     // و یا حتی اطلاعات کاربر رو از دیتابیس بگیری و برگردونی
     // مثلا:
@@ -24,6 +29,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     // برای شروع، همین که payload رو برگردونی کافیه
     console.log(`Validating payload: ${JSON.stringify(payload)}`); // برای دیباگ
-    return { userId: payload.sub, mobile: payload.mobile, name: payload.name };
+    return {
+      userId: payload.sub,
+      mobile: payload.mobile,
+      name: payload.name,
+      role: payload.role,
+    };
   }
 }
