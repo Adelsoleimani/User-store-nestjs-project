@@ -14,7 +14,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindAllQueryDto } from './dto/FindAllQuery.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { EnumRole } from './enums/EnumRole';
 
+@Roles(EnumRole.ADMIN, EnumRole.MODERATOR)
 @ApiBearerAuth()
 @ApiTags('مدیریت کاربران')
 @Controller('users')
