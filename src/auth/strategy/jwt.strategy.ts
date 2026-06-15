@@ -1,39 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // ignoreExpiration: true  توکن منقضی هم قبول میشه.
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_SECRET')!,
     });
   }
-  validate(payload: {
+  async validate(payload: {
     sub: number;
     mobile: string;
     name: string;
     role: string;
   }) {
-    // اینجا می‌تونی اطلاعات payload رو چک کنی
-    // و یا حتی اطلاعات کاربر رو از دیتابیس بگیری و برگردونی
-    // مثلا:
-    // const user = await this.usersService.findOne(payload.sub);
-    // if (!user) {
-    //   throw new UnauthorizedException();
-    // }
-    // return user;
+    //  روش حرفه ای
+    const user = await this.usersService.findOne(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException(
+        'کاربر وجود ندارد با این ایدی که از پیلود اومده',
+      );
+    }
 
-    // برای شروع، همین که payload رو برگردونی کافیه
-    console.log(`Validating payload: ${JSON.stringify(payload)}`); // برای دیباگ
+    // پشت صحنه
+    // const validatedUser = await validate(payload);
+    // req.user = validatedUser;
+    // این ریتورن مستقیماً تبدیل می‌شود به: ریکوست .یوزرز در کل پروژه
     return {
-      userId: payload.sub,
-      mobile: payload.mobile,
-      name: payload.name,
-      role: payload.role,
+      id: user.id,
+      name: user.name,
+      mobile: user.mobile,
+      role: user.role,
     };
   }
 }

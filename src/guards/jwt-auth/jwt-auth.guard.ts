@@ -27,9 +27,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(
     err: any,
     user: any,
-    info: any,
-    context: ExecutionContext,
-    status?: any,
+    // info: any,
+    // context: ExecutionContext,
+    // status?: any,
   ) {
     if (err || !user) {
       throw err || new UnauthorizedException('توکن شما نامعتبر');

@@ -23,10 +23,13 @@ export class RolesGuard implements CanActivate {
 
     // get user metadata from jwt token
 
+    // user از کجا آمد؟
+    // از
+    // JwtStrategy.validate()
     const {
       user,
     }: {
-      user: { userId: number; mobile: string; name: string; role: EnumRole };
+      user: { id: number; mobile: string; name: string; role: EnumRole };
     } = context.switchToHttp().getRequest();
 
     // check access role
@@ -36,18 +39,4 @@ export class RolesGuard implements CanActivate {
 
     return true;
   }
-
-  //   handleRequest(
-  //     err: any,
-  //     user: any,
-  //     info: any,
-  //     context: ExecutionContext,
-  //     status?: any,
-  //   ) {
-  //     if (err || !user) {
-  //       throw err || new UnauthorizedException('توکن شما نامعتبر');
-  //     }
-
-  //     return user;
-  //   }
 }
